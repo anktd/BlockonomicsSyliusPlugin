@@ -16,9 +16,14 @@ final class BlockonomicsSyliusPluginExtension extends Extension
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
-        $configuration = new Configuration();
+        $configuration = $this->getConfiguration([], $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('blockonomics_sylius_plugin.api_key', $config['api_key']);
+        // We can process $config here if needed
+    }
+
+    public function getAlias(): string
+    {
+        return 'blockonomics_sylius_plugin';
     }
 }
