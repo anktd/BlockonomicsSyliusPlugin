@@ -1,17 +1,4 @@
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: false
-
-    Blockonomics\SyliusPlugin\:
-        resource: '../../*'
-        exclude: '../../{Entity,Migrations,Tests,Kernel.php}'
-
-    Blockonomics\SyliusPlugin\Controller\:
-        resource: '../../Controller'
-        tags: ['controller.service_arguments']
-
     blockonomics_sylius_plugin.gateway_factory:
         class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
         arguments: [Blockonomics\SyliusPlugin\Payum\BlockonomicsGatewayFactory]
