@@ -16,10 +16,7 @@ final class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('api_key')
-                    ->isRequired()
-                    ->cannotBeEmpty()
-                ->end()
+                ->scalarNode('api_key')->isRequired()->cannotBeEmpty()->end()
             ->end()
         ;
 
