@@ -1,6 +1,6 @@
 services:
-    blockonomics_sylius_plugin.gateway_factory:
-        class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
-        arguments: [Blockonomics\SyliusPlugin\Payum\BlockonomicsGatewayFactory]
+    blockonomics_sylius_plugin.form.type.gateway_configuration:
+        class: Blockonomics\SyliusPlugin\Form\Type\BlockonomicsGatewayConfigurationType
         tags:
-            - { name: payum.gateway_factory_builder, factory: blockonomics }
+            - { name: sylius.gateway_configuration_type, type: blockonomics, label: "Blockonomics" }
+            - { name: form.type }

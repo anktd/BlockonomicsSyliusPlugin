@@ -7,7 +7,7 @@ namespace Blockonomics\SyliusPlugin\Payum;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 
-class BlockonomicsGatewayFactory extends GatewayFactory
+final class BlockonomicsGatewayFactory extends GatewayFactory
 {
     protected function populateConfig(ArrayObject $config): void
     {
