@@ -19,14 +19,26 @@ symfony start
 
 ### Blockonomics gateway form
 Todo: 
-- Figure out what `Code` is
 - Translations
 - Update callback url to correct url
 - Action to submit form
 
 ![image](https://github.com/user-attachments/assets/842f2766-a82d-4418-a107-5b067e40105f)
 
+### Added Blockonomics payment gateway on Admin 
 
+![image](https://github.com/user-attachments/assets/4284f00e-ab9a-43e9-81d0-c8d8abe07b41)
+
+### Customer selects Blockonomics
+Todo:
+- Potentially add blockonomics icon in the bottom right corner?
+
+![image](https://github.com/user-attachments/assets/98e3e247-bdb7-4f6b-a80d-4320bf703514)
+
+### Payment screen
+Todo: A lot
+
+![image](https://github.com/user-attachments/assets/4fa0f17c-ad7d-4c4e-88cb-7b4b82d1fa34)
 
 ## All below to be updated when we have a product that works end to end
 
