@@ -149,14 +149,14 @@
                     <span>To pay, send bitcoin to this address:</span>
                     <span class="input-wrapper">
                         <input onclick='copyToClipboard("btc-address", this, true)' class="full-width-input" id="btc-address" value="{{ btc_address }}" readonly>
-                        <img onclick='copyToClipboard("btc-address", this)' src="{{ asset('build/copy-icon.svg') }}" class="icon" alt="Copy Icon">
+                        <img onclick='copyToClipboard("btc-address", this)' src="{{ asset('assets/copy-icon.svg') }}" class="icon" alt="Copy Icon">
                     </span>
                     <span>Amount of bitcoin (BTC) to send:</span>
                     <span class="input-wrapper">
                         <div class="full-width-input" id="btc-amount" onclick='copyToClipboard("btc-amount", this, true)'>
                             {{ btc_amount }}
                         </div>
-                        <img onclick='copyToClipboard("btc-amount", this)' src="{{ asset('build/copy-icon.svg') }}" class="icon" alt="Copy Icon">
+                        <img onclick='copyToClipboard("btc-amount", this)' src="{{ asset('assets/copy-icon.svg') }}" class="icon" alt="Copy Icon">
                     </span>
                     <div class="btc-value-wrapper">
                         <div class="btc-value">1 BTC = {{ btc_price }} {{ currency }}, updates in <span id="countdown"></span></div>
@@ -226,7 +226,7 @@
             document.execCommand("copy");
             document.body.removeChild(tempInput);
 
-            element.src = '{{ asset('build/check-icon.svg') }}';
+            element.src = "{{ asset('assets/checkmark-icon.svg') }}";
 
             setTimeout(() => {
                 element.src = originalIcon;

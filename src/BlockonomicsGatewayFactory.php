@@ -4,16 +4,9 @@ declare(strict_types=1);
 
 namespace Blockonomics\SyliusBlockonomicsPlugin;
 
-use Blockonomics\SyliusBlockonomicsPlugin\Action\Api\DoSaleAction;
-use Blockonomics\SyliusBlockonomicsPlugin\Action\Api\FindPaymentMethodNonceAction;
-use Blockonomics\SyliusBlockonomicsPlugin\Action\Api\GenerateClientTokenAction;
-use Blockonomics\SyliusBlockonomicsPlugin\Action\CaptureAction;
-use Blockonomics\SyliusBlockonomicsPlugin\Action\ConvertPaymentAction;
-use Blockonomics\SyliusBlockonomicsPlugin\Action\BlockonomicsPaymentScreen;
-use Blockonomics\SyliusBlockonomicsPlugin\Action\ObtainPaymentMethodNonceAction;
-use Blockonomics\SyliusBlockonomicsPlugin\Action\PurchaseAction;
-use Blockonomics\SyliusBlockonomicsPlugin\Action\StatusAction;
-use Blockonomics\SyliusBlockonomicsPlugin\ApiClient\BlockonomicsApiClientInterface;
+use Blockonomics\SyliusBlockonomicsPlugin\Action\BlockonomicsCaptureAction;
+use Blockonomics\SyliusBlockonomicsPlugin\Action\BlockonomicsStatusAction;
+use Blockonomics\SyliusBlockonomicsPlugin\Action\BlockonomicsConvertAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 
@@ -21,30 +14,41 @@ final class BlockonomicsGatewayFactory extends GatewayFactory
 {
     public const FACTORY_NAME = 'blockonomics';
 
-    protected function populateConfig(ArrayObject $config)
+    protected function populateConfig(ArrayObject $config): void
     {
         $config->defaults([
             'payum.factory_name' => self::FACTORY_NAME,
-            'payum.factory_title' => 'blockonomics',
+            'payum.factory_title' => 'Blockonomics',
             'payum.http_client' => '@blockonomics_sylius_blockonomics_plugin.api_client.blockonomics',
             'payum.template.blockonomics_payment_screen' => '@BlockonomicsSyliusBlockonomicsPlugin/Action/blockonomics_payment_screen.html.twig',
-            'payum.action.authorize' => function (ArrayObject $config) {
-                return new BlockonomicsPaymentScreen($config['payum.template.blockonomics_payment_screen']);
+            'payum.action.capture' => function (ArrayObject $config) {
+                return new BlockonomicsCaptureAction($config['payum.template.blockonomics_payment_screen']);
             },
-            // 'payum.action.purchase' => function (ArrayObject $config) {
-            //     return new ObtainCardholderAuthenticationAction($config['payum.template.obtain_cardholder_authentication']);
-            // },
-            // 'payum.action.obtain_cardholder_authentication' => function (ArrayObject $config) {
-            //     return new ObtainCardholderAuthenticationAction($config['payum.template.obtain_cardholder_authentication']);
-            // },
-            // 'payum.action.status' => function (ArrayObject $config) {
-            //     return new ObtainCardholderAuthenticationAction($config['payum.template.obtain_cardholder_authentication']);
-            // },
-            'cardholderAuthenticationRequired' => true,
+            'payum.action.status' => function (ArrayObject $config) {
+                return new BlockonomicsStatusAction();
+            },
+            'payum.action.convert' => function (ArrayObject $config) {
+                return new BlockonomicsConvertAction();
+            },
         ]);
 
-        $config['payum.paths'] = [
+        // TODO: Implement the following
+        if (false == $config['payum.api']) {
+            // $config['payum.default_options'] = [
+            //     'api_key' => '',
+            // ];
+            // $config->defaults($config['payum.default_options']);
+            // $config['payum.required_options'] = ['api_key'];
+
+            // $config['payum.api'] = function (ArrayObject $config) {
+            //     $config->validateNotEmpty($config['payum.required_options']);
+
+            //     return new BlockonomicsApi($config['api_key'], $config['payum.http_client']);
+            // };
+        }
+
+        $config['payum.paths'] = array_replace([
             'PayumBlockonomics' => __DIR__ . '/Resources/views',
-        ];
+        ], $config['payum.paths'] ?: []);
     }
 }
