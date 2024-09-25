@@ -38,7 +38,7 @@ Todo:
 ### Payment screen
 Todo: A lot
 
-![image](https://github.com/user-attachments/assets/4fa0f17c-ad7d-4c4e-88cb-7b4b82d1fa34)
+![image](https://github.com/user-attachments/assets/c7a2fc67-f6bb-4406-b903-700c75eda06f)
 
 ## All below to be updated when we have a product that works end to end
 

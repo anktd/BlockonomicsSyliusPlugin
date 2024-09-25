@@ -38,10 +38,19 @@ final class BlockonomicsPaymentScreen implements ActionInterface, GatewayAwareIn
         // Logic to generate BTC address and amount
         $btcAddress = 'your_btc_address';
         $btcAmount = '0.01'; // Example amount
+        $btcPrice = '1000'; // Example price
+        $currency = 'USD'; // Example currency
+        $amount = '456'; // Example amount     
+        $orderNumber = '123'; // Example order number
 
         $this->gateway->execute($template = new RenderTemplate($this->templateName, [
             'btc_address' => $btcAddress,
             'btc_amount' => $btcAmount,
+            'btc_price' => $btcPrice,
+            'currency' => $currency,
+            'formAction' => '',
+            'amount' => $amount,
+            'order_number' => $orderNumber,
         ]));
 
         throw new HttpResponse($template->getResult());
