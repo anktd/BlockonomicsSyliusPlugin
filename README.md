@@ -36,6 +36,13 @@ Todo:
 ![image](https://github.com/user-attachments/assets/98e3e247-bdb7-4f6b-a80d-4320bf703514)
 
 ### Payment screen
+Already working:
+- QR code generation
+- BTC address fetch
+- BTC price fetch
+- BTC price refresh every 10 min or on button click
+- Copy to clipboard for BTC address and amount
+
 Todo: 
 - Implement action on WS receiving unconfirmed payment
 - Improve UI
