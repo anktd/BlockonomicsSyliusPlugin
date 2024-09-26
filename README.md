@@ -37,13 +37,10 @@ Todo:
 
 ### Payment screen
 Todo: 
-- QR code
-- Fix copy icons (copy functionality already works)
 - Implement action on WS receiving unconfirmed payment
 - Improve UI
 
-![image](https://github.com/user-attachments/assets/dd3682f2-074a-4f75-9391-faa82ba72c84)
-
+![image](https://github.com/user-attachments/assets/b1a0a73b-c327-425b-884b-f668c45ec277)
 
 ## All below to be updated when we have a product that works end to end
 

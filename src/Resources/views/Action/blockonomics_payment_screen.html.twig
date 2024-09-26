@@ -98,7 +98,7 @@
             margin-left: 5px;
             width: 28px;
             display: flex;
-            font-size: 32px;
+            font-size: 27px;
             margin-bottom: 5px;
         }
         .btc-value {
@@ -148,14 +148,18 @@
                     <span>To pay, send bitcoin to this address:</span>
                     <span class="input-wrapper">
                         <input onclick='copyToClipboard("btc-address", this, true)' class="full-width-input" id="btc-address" value="{{ btc_address }}" readonly>
-                        <img onclick='copyToClipboard("btc-address", this)' src="{{ asset('assets/copy-icon.svg') }}" class="icon" alt="Copy Icon">
+                        <svg  onclick='copyToClipboard("btc-address", this)' width="22" height="24" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
+                            <path d="M15.5 1H3.5C2.4 1 1.5 1.9 1.5 3V17H3.5V3H15.5V1ZM18.5 5H7.5C6.4 5 5.5 5.9 5.5 7V21C5.5 22.1 6.4 23 7.5 23H18.5C19.6 23 20.5 22.1 20.5 21V7C20.5 5.9 19.6 5 18.5 5ZM18.5 21H7.5V7H18.5V21Z" fill="#000"/>
+                        </svg>
                     </span>
                     <span>Amount of bitcoin (BTC) to send:</span>
                     <span class="input-wrapper">
                         <div class="full-width-input" id="btc-amount" onclick='copyToClipboard("btc-amount", this, true)'>
                             {{ btc_amount }}
                         </div>
-                        <img onclick='copyToClipboard("btc-amount", this)' src="{{ asset('assets/copy-icon.svg') }}" class="icon" alt="Copy Icon">
+                        <svg  onclick='copyToClipboard("btc-amount", this)' width="22" height="24" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
+                            <path d="M15.5 1H3.5C2.4 1 1.5 1.9 1.5 3V17H3.5V3H15.5V1ZM18.5 5H7.5C6.4 5 5.5 5.9 5.5 7V21C5.5 22.1 6.4 23 7.5 23H18.5C19.6 23 20.5 22.1 20.5 21V7C20.5 5.9 19.6 5 18.5 5ZM18.5 21H7.5V7H18.5V21Z" fill="#000"/>
+                        </svg>
                     </span>
                     <div class="btc-value-wrapper">
                         <div class="btc-value">1 BTC = {{ btc_price }} {{ currency }}, updates in <span id="countdown"></span></div>
@@ -180,6 +184,7 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
         const startTimer = (seconds) => {
             const countDownDate = new Date().getTime() + seconds * 1000;
@@ -212,7 +217,7 @@
 
         const copyToClipboard = (elementId, passedElement, shouldGrabNextElementSibling) => {
             const element = shouldGrabNextElementSibling ? passedElement.nextElementSibling : passedElement;
-            const originalIcon = element.src;
+            const originalSvgContent = element.innerHTML;
 
             const tempInput = document.createElement("input");
             const elementWithId = document.getElementById(elementId);
@@ -225,10 +230,14 @@
             document.execCommand("copy");
             document.body.removeChild(tempInput);
 
-            element.src = "{{ asset('assets/checkmark-icon.svg') }}";
+            // Change the SVG to the checkmark
+            element.innerHTML = `
+                <path d="M4.04706 14C4.04706 8.55609 8.46025 4.1429 13.9042 4.1429C19.3482 4.1429 23.7613 8.55609 23.7613 14C23.7613 19.444 19.3482 23.8572 13.9042 23.8572C8.46025 23.8572 4.04706 19.444 4.04706 14Z" stroke="#000" stroke-width="2.19048" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9.52325 14L12.809 17.2858L18.2852 11.8096" stroke="#000" stroke-width="2.19048" stroke-linecap="round" stroke-linejoin="round"/>
+            `;
 
             setTimeout(() => {
-                element.src = originalIcon;
+                element.innerHTML = originalSvgContent;
             }, 5000);
         }
 
@@ -253,7 +262,7 @@
                 const newPrice = await getBTCPrice();
                 if (newPrice) {
                     document.getElementsByClassName("btc-value")[0].innerHTML = "1 BTC = " + (newPrice || "N/A") + " {{ currency }}, updates in <span id='countdown'></span>";
-                    const newBtcAmount = ({{ amount }} / newPrice).toFixed(10);
+                    const newBtcAmount = (`{{ amount }}` / newPrice).toFixed(10);
 
                     document.querySelector('input[name="btc_price"]').value = newPrice;
                     document.querySelector('input[name="btc_amount"]').value = newBtcAmount;
@@ -264,9 +273,11 @@
                     qrCodeLink.href = `bitcoin:{{ btc_address }}?amount=${newBtcAmount}`;
                     openInWalletLink.href = `bitcoin:{{ btc_address }}?amount=${newBtcAmount}`;
                     
-                    fetchAndDisplayQRCode(newBtcAmount);
+                    generateQRCode(newBtcAmount);
                     startTimer(600);
                 }
+            } catch (error) {
+                console.error('Error refreshing BTC price:', error);
             } finally {
                 refreshIcon.classList.remove('rotating');
             }
@@ -288,24 +299,27 @@
             }
         };
 
-        const fetchAndDisplayQRCode = async (newBtcAmount = null) => {
+        const generateQRCode = async (newBtcAmount = null) => {
             try {
                 const btcAmount = newBtcAmount || '{{ btc_amount }}';
-                const qrString = encodeURIComponent(`bitcoin:{{ btc_address }}?amount=${btcAmount}`);
-                const response = await fetch('/api/v1/get-blockonomics-qr-code?qr_string=' + qrString);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const svgText = await response.text();
-                document.getElementById('qrcode-container').innerHTML = svgText;
+                const qrString = `bitcoin:{{ btc_address }}?amount=${btcAmount}`;
+                var qrcodeContainer = document.getElementById("qrcode-container");
+                qrcodeContainer.innerHTML = ""; // Clear previous QR code
+                new QRCode(qrcodeContainer, {
+                    text: qrString,
+                    width: 156,
+                    height: 156,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
             } catch (error) {
                 console.error('Error fetching QR code:', error);
                 document.getElementById('qrcode-container').textContent = 'Error loading QR code';
             }
         };
-
         startTimer(600);
         connectToWebsocket();
-        fetchAndDisplayQRCode();
+        generateQRCode();
     </script>
 {% endblock %}
