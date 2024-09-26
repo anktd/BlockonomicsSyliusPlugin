@@ -42,6 +42,10 @@ Todo:
 
 ![image](https://github.com/user-attachments/assets/b1a0a73b-c327-425b-884b-f668c45ec277)
 
+### Post Payment screen
+- Add routes that can accept the callback
+- Test to make sure the order status is updated correctly
+
 ## All below to be updated when we have a product that works end to end
 
 
