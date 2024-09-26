@@ -79,7 +79,6 @@
         }
         .full-width-input {
             width: 100%;
-            max-width: 400px;
             padding: 10px;
             text-align: left;
             border: 1px solid #ccc;
@@ -236,12 +235,10 @@
         const getBTCPrice = async () => {
             try {
                 // TODO: Replace with the actual endpoint
-                const response = await fetch('/api/v1/get-btc-price?currency={{ currency }}');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                return data.price;
+                const response = await fetch('/api/blockonomics/price?currency={{ currency }}')
+
+                const price = await response.json();
+                return price;
             } catch (error) {
                 console.error('There was a problem with the BTC price fetch operation:', error);
             }

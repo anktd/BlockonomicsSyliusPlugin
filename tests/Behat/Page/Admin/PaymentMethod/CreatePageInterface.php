@@ -8,13 +8,9 @@ use Sylius\Behat\Page\Admin\Crud\CreatePageInterface as BaseCreatePageInterface;
 
 interface CreatePageInterface extends BaseCreatePageInterface
 {
-    // public function setMerchantId(string $merchantId): void;
+    public function setApiKey(string $apiKey): void;
 
-    // public function setPublicKey(string $publicKey): void;
+    public function setCallbackUrl(string $callbackUrl): void;
 
-    // public function setPrivateKey(string $privateKey): void;
-
-    // public function checkSandbox(): void;
-
-    // public function containsErrorWithMessage(string $message, bool $strict = true): bool;
+    public function setCallbackSecret(string $callbackSecret): void;
 }

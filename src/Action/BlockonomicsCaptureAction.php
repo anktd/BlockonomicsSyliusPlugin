@@ -19,17 +19,87 @@ class BlockonomicsCaptureAction implements ActionInterface, GatewayAwareInterfac
     use GatewayAwareTrait;
 
     private string $templateName;
+    private $config;
 
-    public function __construct(string $templateName)
+    public function __construct(string $templateName, ArrayObject $config)
     {
         $this->templateName = $templateName;
+        // Retrieve the API key
+        $this->apiKey = $config['apiKey'] ?? null;
+        if (!$this->apiKey) {
+            throw new \LogicException('The api key parameter is required');
+        }
     }
+
+private function makeApiRequest(string $url, array $headers = [], string $method = 'GET'): array
+{
+    $ch = curl_init();
+
+    curl_setopt_array($ch, [
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => $method,
+    ]);
+
+    if (!empty($headers)) {
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    }
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if (curl_errno($ch)) {
+        $error = curl_error($ch);
+        curl_close($ch);
+        return [
+            'success' => false,
+            'message' => "cURL Error: $error",
+        ];
+    }
+
+    curl_close($ch);
+
+    $data = json_decode($response, true);
+
+    return [
+        'success' => $httpCode == 200,
+        'data' => $data,
+        'httpCode' => $httpCode,
+        'message' => $data['message'] ?? 'Unexpected response',
+    ];
+}
+
+public function getBTCPrice(string $currencyCode): string
+{
+    $url = "https://www.blockonomics.co/api/price?currency=$currencyCode";
+    $response = $this->makeApiRequest($url);
+
+    if ($response['success'] && isset($response['data']['price'])) {
+        return (string)$response['data']['price'];
+    }
+
+    return $response['message'] ?? 'Failed to get BTC price';
+}
+
+public function getBTCAddress(): string
+{
+    $url = 'https://www.blockonomics.co/api/new_address?reset=1';
+    $headers = ["Authorization: Bearer {$this->apiKey}"];
+    $response = $this->makeApiRequest($url, $headers, 'POST');
+
+    if ($response['success'] && isset($response['data']['address'])) {
+        return $response['data']['address'];
+    }
+
+    throw new \RuntimeException($response['message'] ?? 'Failed to get BTC address');
+}
 
     public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
+
 
         // Render and display the payment screen
         $response = new Response(
@@ -56,11 +126,11 @@ class BlockonomicsCaptureAction implements ActionInterface, GatewayAwareInterfac
     private function renderTemplate(string $templateName, array $parameters): string
     {
         $model = $parameters['model'];
-        $btcAddress = 'your_btc_address';
-        $btcAmount = '0.01'; // Example amount
-        $btcPrice = '1000'; // Example price
-        $currency = $model['currency']; // Example currency
-        $amount = $model['amount'] / 100; // Example amount     
+        $btcAddress = $this->getBTCAddress();
+        $currency = $model['currency'];
+        $btcPrice = $this->getBTCPrice($currency);
+        $amount = $model['amount'] / 100; // Example amount
+        $btcAmount = round($amount / $btcPrice, 10);
         $orderNumber = $model['invoiceNumber']; // Example order number
 
         $this->gateway->execute($template = new RenderTemplate($this->templateName, [

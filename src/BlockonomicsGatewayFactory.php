@@ -22,7 +22,7 @@ final class BlockonomicsGatewayFactory extends GatewayFactory
             'payum.http_client' => '@blockonomics_sylius_blockonomics_plugin.api_client.blockonomics',
             'payum.template.blockonomics_payment_screen' => '@BlockonomicsSyliusBlockonomicsPlugin/Action/blockonomics_payment_screen.html.twig',
             'payum.action.capture' => function (ArrayObject $config) {
-                return new BlockonomicsCaptureAction($config['payum.template.blockonomics_payment_screen']);
+                return new BlockonomicsCaptureAction($config['payum.template.blockonomics_payment_screen'], $config);
             },
             'payum.action.status' => function (ArrayObject $config) {
                 return new BlockonomicsStatusAction();

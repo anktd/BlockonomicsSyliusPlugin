@@ -49,27 +49,27 @@ final class ManagingPaymentMethodContext implements Context
         Assert::true($this->createPage->containsErrorWithMessage($message));
     }
 
-    // /**
-    //  * @When I fill the Merchant ID with :merchantId
-    //  */
-    // public function iFillTheMerchantIdWith(string $merchantId): void
-    // {
-    //     $this->createPage->setMerchantId($merchantId);
-    // }
+    /**
+     * @When I fill the Api Key with :apiKey
+     */
+    public function iFillTheApiKeyWith(string $apiKey): void
+    {
+        $this->createPage->setApiKey($apiKey);
+    }
 
-    // /**
-    //  * @When I fill the Public Key with :publicKey
-    //  */
-    // public function iFillThePublicKeyWith(string $publicKey): void
-    // {
-    //     $this->createPage->setPublicKey($publicKey);
-    // }
+    /**
+     * @When I fill the Callback URL with :callbackUrl
+     */
+    public function iFillTheCallbackUrlWith(string $callbackUrl): void
+    {
+        $this->createPage->setCallbackUrl($callbackUrl);
+    }
 
-    // /**
-    //  * @When I fill the Private Key with :privateKey
-    //  */
-    // public function iFillThePrivateKeyWith(string $privateKey): void
-    // {
-    //     $this->createPage->setPrivateKey($privateKey);
-    // }
+    /**
+     * @When I fill the Callback Secret with :callbackSecret
+     */
+    public function iFillTheCallbackSecretWith(string $callbackSecret): void
+    {
+        $this->createPage->setCallbackSecret($callbackSecret);
+    }
 }

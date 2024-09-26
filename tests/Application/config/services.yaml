@@ -1,4 +1,11 @@
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
-parameters:
-    locale: en_US
+# config/services.yaml
+services:
+    # Default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # Explicitly define the BlockonomicsController as a service
+    Blockonomics\SyliusBlockonomicsPlugin\Controller\BlockonomicsController:
+        arguments:
+            $httpClient: '@http_client'

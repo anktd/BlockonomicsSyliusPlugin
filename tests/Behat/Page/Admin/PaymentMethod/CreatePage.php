@@ -9,25 +9,20 @@ use Sylius\Behat\Page\Admin\Crud\CreatePage as BaseCreatePage;
 
 final class CreatePage extends BaseCreatePage implements CreatePageInterface
 {
-    // public function setMerchantId(string $merchantId): void
-    // {
-    //     $this->getDocument()->fillField('Merchant ID', $merchantId);
-    // }
+    public function setApiKey(string $apiKey): void
+    {
+        $this->getDocument()->fillField('Api Key', $apiKey);
+    }
 
-    // public function setPublicKey(string $publicKey): void
-    // {
-    //     $this->getDocument()->fillField('Public Key', $publicKey);
-    // }
+    public function setCallbackUrl(string $callbackUrl): void
+    {
+        $this->getDocument()->fillField('Callback URL', $callbackUrl);
+    }
 
-    // public function setPrivateKey(string $privateKey): void
-    // {
-    //     $this->getDocument()->fillField('Private Key', $privateKey);
-    // }
-
-    // public function checkSandbox(): void
-    // {
-    //     $this->getDocument()->checkField('Sandbox');
-    // }
+    public function setCallbackSecret(string $callbackSecret): void
+    {
+        $this->getDocument()->fillField('Callback Secret', $callbackSecret);
+    }
 
     public function containsErrorWithMessage(string $message, bool $strict = true): bool
     {
