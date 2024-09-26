@@ -46,7 +46,7 @@ Todo:
 - Add routes that can accept the callback
 - Test to make sure the order status is updated correctly
 
-## All below to be updated when we have a product that works end to end
+## The below should to be updated when the Blockonomoics plugin works end to end
 
 
 <p align="center">
