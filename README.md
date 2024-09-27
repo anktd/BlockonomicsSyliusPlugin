@@ -50,8 +50,19 @@ Todo:
 ![image](https://github.com/user-attachments/assets/b1a0a73b-c327-425b-884b-f668c45ec277)
 
 ### Post Payment screen
+
+![image](https://github.com/user-attachments/assets/df4af2aa-ffe1-4d35-8b88-fb7ee774e5e9)
+
 - Add routes that can accept the callback
 - Test to make sure the order status is updated correctly
+- Add information about order (e.g. txid) instead of warning
+
+### Admin view of order
+Todo:
+- Add Bitcoin icon instead of card icon next to Blockonomics?
+- Create callback that can mark payment as complete
+![image](https://github.com/user-attachments/assets/1f6f32e2-aa52-40f3-b7c6-2faa1c6e1a7c)
+
 
 ## The below should to be updated when the Blockonomoics plugin works end to end
 

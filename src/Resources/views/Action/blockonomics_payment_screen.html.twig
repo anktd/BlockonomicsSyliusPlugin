@@ -170,7 +170,7 @@
         </div>
     </div>
 
-    <form action="{{ formAction }}" method="post" id="server-response">
+    <form action="{{ formAction }}" method="POST" id="form">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('payment_after_pay') }}">
         <input type="hidden" name="gateway_response">
         <input type="hidden" name="token">
@@ -179,6 +179,7 @@
         <input type="hidden" name="btc_amount" value="{{ btc_amount }}">
         <input type="hidden" name="currency" value="{{ currency }}">
         <input type="hidden" name="txid" value="">
+        <input type="hidden" name="payment_id" value="{{ payment_id }}">
     </form>
 {% endblock %}
 
@@ -286,6 +287,7 @@
         const connectToWebsocket = () => {
             const webSocketUrl = "wss://www.blockonomics.co/payment/{{ btc_address }}";
             const ws = new WebSocket(webSocketUrl);
+            console.log('Connecting to websocket:', webSocketUrl);
 
             ws.onmessage = function(event) {
                 const data = JSON.parse(event.data);
@@ -294,7 +296,9 @@
                 const isPaymentPartiallyConfirmed = data.status === 1;
                 if (isPaymentUnconfirmed || isPaymentPartiallyConfirmed) {
                     document.querySelector('input[name="txid"]').value = data.txid || '';
-                    document.getElementById('server-response').submit();
+                    // document.getElementById('form').submit();
+                    console.log("{{ after_url }}");
+                    window.location.href = '{{ after_url}}'
                 }
             }
         };

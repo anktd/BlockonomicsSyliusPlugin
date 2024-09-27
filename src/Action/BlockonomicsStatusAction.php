@@ -14,6 +14,8 @@ class BlockonomicsStatusAction implements ActionInterface
 
         if ($request->getModel()['status'] === 'paid') {
             $request->markCaptured();
+        } else if ($request->getModel()['status'] === 'pending') {
+            $request->markPending();
         } else {
             $request->markNew();
         }
