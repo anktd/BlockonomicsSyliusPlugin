@@ -244,8 +244,8 @@
 
         const getBTCPrice = async () => {
             try {
-                // TODO: Replace with the actual endpoint
-                const response = await fetch('/api/blockonomics/price?currency={{ currency }}')
+                const url = encodeURIComponent('/api/blockonomics/price?currency={{ currency }}');
+                const response = await fetch(url)
 
                 const price = await response.json();
                 return price;
@@ -289,19 +289,31 @@
             const ws = new WebSocket(webSocketUrl);
             console.log('Connecting to websocket:', webSocketUrl);
 
-            ws.onmessage = function(event) {
+            ws.onmessage = async function (event) {
                 const data = JSON.parse(event.data);
-                console.log('Payment status:', data.status);
                 const isPaymentUnconfirmed = data.status === 0;
                 const isPaymentPartiallyConfirmed = data.status === 1;
                 if (isPaymentUnconfirmed || isPaymentPartiallyConfirmed) {
                     document.querySelector('input[name="txid"]').value = data.txid || '';
-                    // document.getElementById('form').submit();
-                    console.log("{{ after_url }}");
-                    window.location.href = '{{ after_url}}'
+                    await updateOrderNodeWithTxid(data.txid);
+                    document.getElementById('form').submit();
                 }
             }
         };
+
+        const updateOrderNodeWithTxid = async (txid) => {
+            try {
+                const baseUrl = '/api/blockonomics/update-order-note';
+                const queryParams = `txid=${txid}&invoice_number={{ order_number }}`;
+                const url = `${baseUrl}?${queryParams}`;
+                console.log(url);
+
+                const response = await fetch(url);
+            } catch (error) {
+                console.error('There was a problem with updating the order note with txid:', error);
+            }
+        }
+
 
         const generateQRCode = async (newBtcAmount = null) => {
             try {

@@ -34,17 +34,19 @@ final class BlockonomicsGatewayFactory extends GatewayFactory
 
         // TODO: Implement the following
         if (false == $config['payum.api']) {
-            // $config['payum.default_options'] = [
-            //     'api_key' => '',
-            // ];
-            // $config->defaults($config['payum.default_options']);
-            // $config['payum.required_options'] = ['api_key'];
+            $config['payum.default_options'] = [
+                'apiKey' => '',
+            ];
+            $config->defaults($config['payum.default_options']);
+            $config['payum.required_options'] = ['apiKey'];
 
-            // $config['payum.api'] = function (ArrayObject $config) {
-            //     $config->validateNotEmpty($config['payum.required_options']);
+            $config['payum.api'] = function (ArrayObject $config) {
+                $apiClient = $config['payum.http_client'];
 
-            //     return new BlockonomicsApi($config['api_key'], $config['payum.http_client']);
-            // };
+                $apiClient->initialise((array) $config);
+
+                return $apiClient;
+            };
         }
 
         $config['payum.paths'] = array_replace([

@@ -9,3 +9,5 @@ services:
     Blockonomics\SyliusBlockonomicsPlugin\Controller\BlockonomicsController:
         arguments:
             $httpClient: '@http_client'
+            $orderRepository: '@sylius.repository.order'
+            $entityManager: '@doctrine.orm.default_entity_manager'

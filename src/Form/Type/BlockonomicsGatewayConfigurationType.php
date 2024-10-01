@@ -55,8 +55,7 @@ final class BlockonomicsGatewayConfigurationType extends AbstractType
                 'label' => 'blockonomics_sylius_blockonomics_plugin.ui.callback_url',
                 'required' => true,
                 'disabled' => true,
-                // TODO: Change this to the correct URL
-                'data' => $baseUrl . "/unknown/url/?secret=" . $callbackSecret,
+                'data' => $baseUrl . "/api/blockonomics/update-order-status?secret=" . $callbackSecret,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'blockonomics_sylius_blockonomics_plugin.callback_url.not_blank',

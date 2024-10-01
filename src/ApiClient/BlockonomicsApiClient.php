@@ -4,27 +4,27 @@ declare(strict_types=1);
 
 namespace Blockonomics\SyliusBlockonomicsPlugin\ApiClient;
 
-use Blockonomics\ClientToken;
-use Blockonomics\Configuration;
-use Blockonomics\PaymentMethodNonce;
-use Blockonomics\Result\Error;
-use Blockonomics\Result\Successful;
-use Blockonomics\Transaction;
-use Payum\Core\Bridge\Spl\ArrayObject;
-
 class BlockonomicsApiClient implements BlockonomicsApiClientInterface
 {
-    /** @var array */
-    protected $options = [];
+    private array $options = [];
 
     public function initialise(array $options): void
     {
         $this->options = $options;
+    }
 
-        Configuration::reset();
+    public function getApiKey(): ?string
+    {
+        return $this->options['apiKey'] ?? null;
+    }
 
-        Configuration::apiKey($this->options['apiKey']);
-        Configuration::callbackSecret($this->options['callbackSecret']);
-        Configuration::callbackUrl($this->options['callbackUrl']);
+    public function getCallbackSecret(): ?string
+    {
+        return $this->options['callbackSecret'] ?? null;
+    }
+
+    public function getCallbackUrl(): ?string
+    {
+        return $this->options['callbackUrl'] ?? null;
     }
 }

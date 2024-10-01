@@ -16,9 +16,12 @@
             <argument type="string">Blockonomics\SyliusBlockonomicsPlugin\BlockonomicsGatewayFactory</argument>
             <tag name="payum.gateway_factory_builder" factory="blockonomics" />
         </service>
-
-        <service id="blockonomics_sylius_blockonomics_plugin.payment_processing.refund" class="Blockonomics\SyliusBlockonomicsPlugin\PaymentProcessing\RefundPaymentProcessor">
-            <argument type="service" id="blockonomics_sylius_blockonomics_plugin.api_client.blockonomics" />
-        </service>
+        
+        <!-- Explicitly define the BlockonomicsController as a service
+        <service id="Blockonomics\SyliusBlockonomicsPlugin\Controller\BlockonomicsController">
+            <argument key="$httpClient">@http_client</argument>
+            <argument key="$orderRepository">@sylius.repository.order</argument>
+            <argument key="$entityManager">@doctrine.orm.entity_manager</argument>
+        </service> -->
     </services>
 </container>

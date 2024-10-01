@@ -104,31 +104,24 @@ class BlockonomicsCaptureAction implements ActionInterface, GatewayAwareInterfac
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
+        $this->gateway->execute($httpRequest = new GetHttpRequest());
+
+        // if ($httpRequest->method === 'POST' && isset($httpRequest->request['txid'])) {            
+        //     $after_url = $request->getToken()->getAfterUrl();
+        //     $response = new RedirectResponse($after_url);
+        //     $response->send();
+        //     exit;   
+        // }
+
         $btcAddress = $this->getBTCAddress();
         $currency = $model['currency'];
         $btcPrice = $this->getBTCPrice($currency);
-        $amount = $model['amount'] / 100; // Example amount
+        $amount = $model['amount'] / 100;
         $btcAmount = round($amount / $btcPrice, 10);
-        $orderNumber = $model['invoiceNumber']; // Example order number
-
-        $this->gateway->execute($clientHttpRequest = new GetHttpRequest());
-
-        $status = new GetStatus($request->getModel());
-        $this->gateway->execute($status);
-        $status->markCaptured();
-
-        // if (array_key_exists('txid', $clientHttpRequest->request)) {
-        //     $txid = $clientHttpRequest->request['txid'];
-
-            
-        //     $token = $request->getToken();
-        //     echo $model['status'];
-        //     echo $token->getAfterUrl();
-        //     $response = new RedirectResponse($token->getAfterUrl());
-            
-        //     $response->send();
-        // }
+        $orderNumber = $model['invoiceNumber'];
+        $paymentId = $model['payment_id'];
         $model['status'] = 'pending';
+
         $after_url = $request->getToken()->getAfterUrl();
         $this->gateway->execute($template = new RenderTemplate($this->templateName, [
             'btc_address' => $btcAddress,
@@ -136,10 +129,9 @@ class BlockonomicsCaptureAction implements ActionInterface, GatewayAwareInterfac
             'btc_price' => $btcPrice,
             'currency' => $currency,
             'formAction' => $after_url,
-            'after_url' => $after_url,
             'amount' => $amount,
             'order_number' => $orderNumber,
-            'payment_id' => $model['payment_id'],
+            'payment_id' => $paymentId,
         ]));
         throw new HttpResponse($template->getResult());
         $response->send();
